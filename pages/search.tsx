@@ -19,6 +19,8 @@ import {
   useSearchMeta,
 } from '@lib/search'
 
+const { Prefetch } = require('@xdn/react')
+
 export async function getStaticProps({
   preview,
   locale,
@@ -72,7 +74,10 @@ export default function Search({
         <div className="col-span-2">
           <ul className="mb-10">
             <li className="py-1 text-base font-bold tracking-wide">
-              <Link href={{ pathname: getCategoryPath('', brand), query }}>
+              <Link
+                href={{ pathname: getCategoryPath('', brand), query }}
+                passHref
+              >
                 <a>All Categories</a>
               </Link>
             </li>
@@ -88,15 +93,23 @@ export default function Search({
                     pathname: getCategoryPath(cat.path, brand),
                     query,
                   }}
+                  passHref
                 >
-                  <a>{cat.name}</a>
+                  <Prefetch
+                    url={`/api/bigcommerce/catalog/products?category=${cat.entityId}&brand=${brand}`}
+                  >
+                    <a>{cat.name}</a>
+                  </Prefetch>
                 </Link>
               </li>
             ))}
           </ul>
           <ul>
             <li className="py-1 text-base font-bold tracking-wide">
-              <Link href={{ pathname: getDesignerPath('', category), query }}>
+              <Link
+                href={{ pathname: getDesignerPath('', category), query }}
+                passHref
+              >
                 <a>All Designers</a>
               </Link>
             </li>
@@ -112,8 +125,13 @@ export default function Search({
                     pathname: getDesignerPath(node.path, category),
                     query,
                   }}
+                  passHref
                 >
-                  <a>{node.name}</a>
+                  <Prefetch
+                    url={`/api/bigcommerce/catalog/products?category=${node.entityId}&brand=${brand}`}
+                  >
+                    <a>{node.name}</a>
+                  </Prefetch>
                 </Link>
               </li>
             ))}
