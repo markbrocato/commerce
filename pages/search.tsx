@@ -1,5 +1,8 @@
 import cn from 'classnames'
-import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from 'next'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { getConfig } from '@bigcommerce/storefront-data-hooks/api'
@@ -21,10 +24,10 @@ import {
 
 const { Prefetch } = require('@xdn/react')
 
-export async function getStaticProps({
+export async function getServerSideProps({
   preview,
   locale,
-}: GetStaticPropsContext) {
+}: GetServerSidePropsContext) {
   const config = getConfig({ locale })
   const { pages } = await getAllPages({ config, preview })
   const { categories, brands } = await getSiteInfo({ config, preview })
@@ -44,7 +47,7 @@ const SORT = Object.entries({
 export default function Search({
   categories,
   brands,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const router = useRouter()
   const { asPath } = router
   const { q, sort } = router.query

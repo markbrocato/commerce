@@ -1,5 +1,8 @@
 import { useMemo } from 'react'
-import type { GetStaticPropsContext, InferGetStaticPropsType } from 'next'
+import type {
+  GetServerSidePropsContext,
+  InferGetServerSidePropsType,
+} from 'next'
 import { getConfig } from '@bigcommerce/storefront-data-hooks/api'
 import getAllProducts from '@bigcommerce/storefront-data-hooks/api/operations/get-all-products'
 import getSiteInfo from '@bigcommerce/storefront-data-hooks/api/operations/get-site-info'
@@ -10,10 +13,10 @@ import { Grid, Marquee, Hero } from '@components/ui'
 import { ProductCard } from '@components/product'
 import HomeAllProductsGrid from '@components/core/HomeAllProductsGrid'
 
-export async function getStaticProps({
+export async function getServerSideProps({
   preview,
   locale,
-}: GetStaticPropsContext) {
+}: GetServerSidePropsContext) {
   const config = getConfig({ locale })
 
   const { products: featuredProducts } = await getAllProducts({
@@ -43,7 +46,6 @@ export async function getStaticProps({
       brands,
       pages,
     },
-    revalidate: 10,
   }
 }
 
@@ -55,7 +57,7 @@ export default function Home({
   newestProducts,
   categories,
   brands,
-}: InferGetStaticPropsType<typeof getStaticProps>) {
+}: InferGetServerSidePropsType<typeof getServerSideProps>) {
   const { featured, bestSelling } = useMemo(() => {
     // Create a copy of products that we can mutate
     const products = [...newestProducts]
